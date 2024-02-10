@@ -8,7 +8,7 @@ import BottomBar from "@/components/shared/BottomBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
 import RightSideBar from "@/components/shared/RightSideBar";
 
-const josefSansRegular = localFont({src: '../../public/fonts/JosefinSans-Regular.ttf'})
+const urbanistMedium = localFont({src: '../../public/fonts/Urbanist-Medium.ttf'})
 
 export const metadata: Metadata = {
   title: "Nomeo Threads 1.0",
@@ -19,7 +19,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={josefSansRegular.className}>
+        <body className={urbanistMedium.className}>
           <TopBar/>
           <main className="flex flex-row">
             <LeftSideBar/>

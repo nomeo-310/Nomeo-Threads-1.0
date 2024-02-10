@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from 'react-hook-form'
@@ -12,15 +12,13 @@ import { userValidation } from '@/lib/validations/user';
 import { z } from 'zod'
 import { isBase64Image } from '@/lib/utils'
 import { useUploadThing } from '@/lib/useUploadThing'
-import { updateUser } from '@/lib/actions/action.user'
+import { updateUser } from '@/lib/actions/user.actions'
 import { usePathname, useRouter } from 'next/navigation'
+import { accountProfileProps } from '@/types/types'
 
-type Props = {
-  user:any
-  btnTitle: string
-}
 
-const AccountProfile = ({user, btnTitle}:Props) => {
+
+const AccountProfile = ({user, btnTitle}:accountProfileProps) => {
   const [files, setFiles] = React.useState<File[]>([]);
   const [isLoading, setIsloading] = React.useState(false)
   const { startUpload } = useUploadThing("imageUploader");
@@ -123,7 +121,8 @@ const AccountProfile = ({user, btnTitle}:Props) => {
                 className='account-form_input no-focus'
                 {...field}
               />
-            </FormControl> 
+            </FormControl>
+            <FormMessage/>
           </FormItem>
           )}/>
         <FormField control={form.control} name='username' render={({field}) => (
@@ -135,7 +134,8 @@ const AccountProfile = ({user, btnTitle}:Props) => {
                 className='account-form_input no-focus'
                 {...field}
               />
-            </FormControl> 
+            </FormControl>
+            <FormMessage/>
           </FormItem>
           )}/>
         <FormField control={form.control} name='bio' render={({field}) => (
@@ -147,10 +147,13 @@ const AccountProfile = ({user, btnTitle}:Props) => {
                 className='account-form_input no-focus'
                 {...field}
               />
-            </FormControl> 
+            </FormControl>
+            <FormMessage/> 
           </FormItem>
           )}/>
-        <Button type='submit' className='bg-primary-500' disabled={isLoading}>{isLoading ? '...Creating profile' : 'Submit'}</Button>
+        <div className='flex justify-end'>
+          <Button type='submit' className='bg-primary-500 py-2 lg:py-3 px-5 lg:px-7 rounded-full' disabled={isLoading}>{isLoading ? '...Creating Profile' : 'Submit'}</Button>
+        </div>
       </form>
     </Form>
   )

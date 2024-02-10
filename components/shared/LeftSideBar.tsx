@@ -7,11 +7,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { SignOutButton, SignedIn } from '@clerk/nextjs';
+import { SignOutButton, SignedIn, useAuth } from '@clerk/nextjs';
 
 const LeftSideBar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const { userId } = useAuth();
 
   const LeftSideBarItem = ({route, label, imgURL, isActive}:itemProps) => {
     return (
@@ -38,11 +39,15 @@ const LeftSideBar = () => {
   return (
     <section className='custom-scrollbar leftsidebar'>
       <div className="w-full flex flex-1 flex-col gap-6 px-6">
-        {sidebarLinks.map((link:any) => (
-          <LeftSideBarItem 
-            key={link.label} {...link} 
-            isActive={pathname.includes(link.route) && link.route.length > 1 || pathname === link.route}
-          />)
+        {sidebarLinks.map((link:any) => {
+          if (link.route === '/profile') link.route = `${link.route}/${userId}`
+          return (
+            <LeftSideBarItem 
+              key={link.label} {...link} 
+              isActive={pathname.includes(link.route) && link.route.length > 1 || pathname === link.route}
+            />
+          )
+        }
         )}
       </div>
       <div className="mt-10 px-6">

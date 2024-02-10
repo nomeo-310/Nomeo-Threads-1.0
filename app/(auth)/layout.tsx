@@ -3,7 +3,7 @@ import localFont from 'next/font/local'
 import { ClerkProvider } from "@clerk/nextjs";
 import '../globals.css';
 
-const josefSansRegular = localFont({src: '../../public/fonts/JosefinSans-Regular.ttf'})
+const urbanistMedium = localFont({src: '../../public/fonts/Urbanist-Medium.ttf'})
 
 export const metadata: Metadata = {
   title: "Nomeo Threads 1.0",
@@ -14,7 +14,11 @@ export default function RootLayout({children}:{children: React.ReactNode}) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${josefSansRegular.className} bg-dark-1`}>{children}</body>
+        <body className={`${urbanistMedium.className} bg-dark-1`}>
+          <div className="w-full flex items-center justify-center min-h-screen">
+            {children}
+          </div>
+        </body>
       </html>
     </ClerkProvider>
   );

@@ -1,20 +1,18 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const communitySchema = new mongoose.Schema({
   id: { type: String, require: true },
   username: { type: String, require: true, unique: true },
   name: { type: String, require: true },
   bio: { type: String },
   image: { type: String },
+  createdBy: {type: mongoose.Schema.ObjectId, ref: 'User'},
   threads: [{type: mongoose.Schema.ObjectId, ref: 'Thread'}],
-  onboarded: { type: Boolean, default: false},
-  communities: [{type: mongoose.Schema.ObjectId, ref: 'Community'}],
-  followers: { type: Array},
-  followings: { type: Array}
+  members: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
 });
 
 (mongoose.models as any) = {};
 
-const User = mongoose.models.User || mongoose.model('User', userSchema);
+const Community = mongoose.models.User || mongoose.model('Community', communitySchema);
 
-export default User;
+export default Community;
