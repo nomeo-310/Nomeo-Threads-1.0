@@ -24,7 +24,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
           <main className="flex flex-row">
             <LeftSideBar/>
             <section className="main-container">
-              <div className="w-full">
+              <div className="w-full w-max-4xl">
                 {children}
               </div>
             </section>
