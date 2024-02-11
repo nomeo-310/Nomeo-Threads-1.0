@@ -86,7 +86,7 @@ const PostThread = ({userId}:postThreadProps) => {
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col justify-start gap-5'>
           <FormField control={form.control} name='thread_image' render={({field}) => (
             <FormItem className='flex flex-col'>
-              <div className={`${field.value ? 'h-[250px]' : ''} relative w-full rounded`}>
+              <div className={`${field.value ? 'h-[250px] mt-8' : ''} relative w-full rounded`}>
                 { field.value && 
                   <Image 
                     src={field.value} 
