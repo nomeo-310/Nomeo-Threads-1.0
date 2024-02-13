@@ -14,6 +14,7 @@ import { isBase64Image } from '@/lib/utils'
 import { useUploadThing } from '@/lib/useUploadThing'
 import { usePathname, useRouter } from 'next/navigation'
 import { createThread } from '@/lib/actions/thread.actions'
+import { useOrganization } from '@clerk/nextjs'
 
 type postThreadProps = {
   userId: string
@@ -27,6 +28,7 @@ const PostThread = ({userId}:postThreadProps) => {
 
   const router = useRouter();
   const pathname = usePathname();
+  const { organization }= useOrganization();
 
   const form = useForm({
     resolver: zodResolver(threadValidation),
@@ -71,7 +73,7 @@ const PostThread = ({userId}:postThreadProps) => {
       thread: values.thread, 
       threadImage: values.thread_image, 
       author: userId, 
-      communityId: null, 
+      communityId: organization ? organization.id : null, 
       path: pathname
     };
 

@@ -2,15 +2,11 @@ import AccountProfile from "@/components/forms/AccountProfile";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { userDataProps } from "@/types/types";
 import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 
 const Page = async () => {
-
   const user = await currentUser();
   if (!user) return null 
   const userInfo  = await fetchUser(user.id);
-
-  if (userInfo && userInfo.onboarded) redirect('/');
 
   const userData:userDataProps = {
     id: user?.id,
@@ -23,8 +19,8 @@ const Page = async () => {
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start px-10 py-10">
-      <h1 className="head-text">Onboarding</h1>
-      <p className="mt-3 text-base-regular text-light-2">Complete your profile to use Nomeo Threads</p>
+      <h1 className="head-text">Update Profile Details</h1>
+      <p className="mt-3 text-base-regular text-light-2">Update some of the information in your profile.</p>
       <section className="mt-9 bg-dark-2 p-10 rounded-md">
         <AccountProfile user={userData} btnTitle="Continue"/>
       </section>

@@ -2,8 +2,10 @@ import React from 'react'
 import { singleThreadProps } from '@/types/types'
 import Link from 'next/link';
 import {ControlButtons, ProfileAvatar} from '../shared/SingleThreadAddOns';
+import { formatDateString } from '@/lib/utils';
+import Image from 'next/image';
 
-const SingleThread = ({id, currentUser, parentId, thread, threadImage, author, comments, community, isComment, likes}:singleThreadProps) => {
+const SingleThread = ({id, currentUser, parentId, thread, threadImage, author, comments, community, isComment, likes,createdAt}:singleThreadProps) => {
   return (
     <article className={`w-full flex flex-col rounded-lg ${isComment ? 'px-0 xs:px-5' : 'bg-dark-2 lg:p-7 p-5'}`}>
       <div className="flex items-start justify-between">
@@ -35,24 +37,86 @@ const SingleThread = ({id, currentUser, parentId, thread, threadImage, author, c
                 threadId={id}
                 userId={currentUser}
               />
-              <div className="flex items-center gap-3">
-                { comments && comments.length > 0 && 
-                  (<Link href={`/thread/${id}`}>
-                    <p className="mt-1 text-subtle-medium text-gray-1">
-                      {comments.length} { comments.length === 1 ? 'reply' : 'replies' } 
+              <div className="flex justify-between">
+                <div className="flex items-center gap-3">
+                  { comments && comments.length > 0 && 
+                    (<Link href={`/thread/${id}`} className='flex items-center'>
+                      { comments.map((author, index) => (
+                        <Image
+                          key={index}
+                          src={author.author.image}
+                          alt={`user_${index}`}
+                          width={28}
+                          height={28}
+                          className={`${
+                            index !== 0 && "-ml-2"
+                          } rounded-full object-cover`}
+                        />))
+                      }
+                      <p className="ml-2 text-subtle-medium text-gray-1">
+                        {comments.length} { comments.length === 1 ? 'reply' : 'replies' } 
+                      </p>
+                    </Link>)
+                  }
+                  { likes && likes.length > 0 && 
+                    <p className="text-subtle-medium text-gray-1">
+                      {likes.length} { likes.length === 1 ? 'like' : 'likes' } 
                     </p>
-                  </Link>)
-                }
-                { likes && likes.length > 0 && 
-                  <p className="mt-1 text-subtle-medium text-gray-1">
-                    {likes.length} { likes.length === 1 ? 'like' : 'likes' } 
+                  }
+                </div>
+                { !community && 
+                  <p className='text-subtle-medium text-gray-1'>
+                    {formatDateString(createdAt)}
                   </p>
                 }
               </div>
             </div>
           </div>
+          {/* delete botton */}
+          {/* show users */}
         </div>
       </div>
+      {/* <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+          { comments && comments.length > 0 && (
+            <Link href={`/thread/${id}`} className='flex items-center'>
+              { comments.map((author, index) => (
+                <Image
+                  key={index}
+                  src={author.author.image}
+                  alt={`user_${index}`}
+                  width={28}
+                  height={28}
+                  className={`${
+                    index !== 0 && "-ml-2"
+                  } rounded-full object-cover`}
+                />))
+              }
+              <p className="mt-1 text-subtle-medium text-gray-1">
+                {comments.length} { comments.length === 1 ? 'reply' : 'replies' } 
+              </p>
+            </Link>)
+          }
+          { likes && likes.length > 0 && 
+            <p className="mt-1 text-subtle-medium text-gray-1">
+              {likes.length} { likes.length === 1 ? 'like' : 'likes' } 
+            </p>
+          }
+        </div>
+        { !community && 
+          <p className='text-subtle-medium text-gray-1'>
+            {formatDateString(createdAt)}
+          </p>
+        }
+      </div> */}
+      {!isComment && community && 
+        <Link href={`/communities/${community.id}`} className='mt-5 flex items-center'>
+          <p className='text-subtle-medium text-gray-1'>
+            {formatDateString(createdAt)} - {community.name} Community
+          </p>
+          <Image src={community.image} width={20} height={20} alt={community.name} className='ml-1 rounded-full object-cover'/>
+        </Link>
+      }
     </article>
   )
 }

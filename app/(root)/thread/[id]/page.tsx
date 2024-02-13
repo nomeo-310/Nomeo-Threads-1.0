@@ -2,6 +2,7 @@ import SingleThread from '@/components/cards/SingleThread';
 import Comment from '@/components/forms/Comment';
 import { fetchThreadById } from '@/lib/actions/thread.actions';
 import { fetchUser } from '@/lib/actions/user.actions';
+import { formatDateString } from '@/lib/utils';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import React from 'react'

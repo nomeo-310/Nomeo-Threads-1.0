@@ -4,17 +4,26 @@ import { createThreadProps } from "@/types/types"
 import { connectToDataBase } from "../mongoose"
 import Thread from "../models/thread.model"
 import User from "../models/user.model"
+import Community from "../models/community.model"
 import { revalidatePath } from "next/cache"
 
 export const createThread = async({thread, threadImage, path, communityId, author}:createThreadProps) => {
-  connectToDataBase();
   try {
+    connectToDataBase();
+    const communityIdObject = await Community.findOne({ id: communityId },{ _id: 1 });
+
     const createdThread = await Thread.create({
-      thread, threadImage, community: null, author
+      thread, threadImage, community: communityIdObject, author
     });
+
     createdThread.save();
 
     await User.findOneAndUpdate({_id: author}, {$push: {threads: createdThread._id}});
+
+    if (communityIdObject) {
+      await Community.findByIdAndUpdate(communityIdObject, {$push: { threads: createdThread._id },});
+    }
+
     revalidatePath(path)
   } catch (error:any) {
     throw new Error(`Failed to create thread: ${error.message}`)
@@ -30,6 +39,7 @@ export const fetchThreads = async(pageNumber:number, pageSize:number) => {
   .skip(skipAmount)
   .limit(pageSize)
   .populate({path: 'author', model: User })
+  .populate({path: "community", model: Community })
   .populate({path: 'children', populate: {
     path: 'author',
     model: User,
@@ -42,6 +52,8 @@ export const fetchThreads = async(pageNumber:number, pageSize:number) => {
   return {posts, isNext}
 }
 
+export const fetchChildThreads = async () => {}
+
 export const fetchThreadById = async(id:string) => {
   connectToDataBase();
   try {
@@ -50,6 +62,11 @@ export const fetchThreadById = async(id:string) => {
       path: 'author',
       model: User,
       select: 'id _id name image followers followings'
+    })
+    .populate({
+      path: "community",
+      model: Community,
+      select: "_id id name image",
     })
     .populate({
       path: 'children',

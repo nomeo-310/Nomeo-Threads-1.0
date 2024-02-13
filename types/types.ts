@@ -75,6 +75,8 @@ export interface profileHeaderProps {
   image:string
   bio:string
   followers:string[]
+  type?:'User' | 'Community'
+  isAdmin?:boolean
 }
 
 export interface profileHeaderAvatarProps {
@@ -83,6 +85,7 @@ export interface profileHeaderAvatarProps {
   image:string
   accountId:string
   loggedInUserId:string
+  type?:'User' | 'Community'
 }
 
 export interface fetchUserProps {
@@ -98,4 +101,15 @@ export interface fetchCommunitiesProps {
   pageNumber?: number;
   pageSize?: number;
   sortBy?: SortOrder;
+}
+
+export interface singleCommunityProps {
+  id: string;
+  name: string;
+  username: string;
+  image: string;
+  bio: string;
+  members: {
+    image: string;
+  }[];
 }

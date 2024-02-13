@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import Thread from "../models/thread.model";
+import Community from "../models/community.model";
 import { connectToDataBase } from "../mongoose"
 import { fetchUserProps, updateUserProps } from "@/types/types";
 import { FilterQuery } from "mongoose";
@@ -75,7 +76,13 @@ export const fetchUserThreads = async(userId:string) => {
     .populate({
       path: 'threads',
       model: Thread,
-      populate: {
+      populate:[
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id",
+        },
+        {
         path: 'children',
         model: Thread,
         populate: {
@@ -83,7 +90,8 @@ export const fetchUserThreads = async(userId:string) => {
           model: User,
           select: 'name username id _id followers followings image'
         }
-      }
+      },
+    ],
     })
     return threads;
   }catch (error:any) {

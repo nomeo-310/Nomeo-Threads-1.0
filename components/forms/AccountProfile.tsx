@@ -143,7 +143,7 @@ const AccountProfile = ({user, btnTitle}:accountProfileProps) => {
             <FormLabel className='text-base-semibold text-light-2'>Bio</FormLabel>
             <FormControl>
               <Textarea
-                rows={8}
+                rows={7}
                 className='account-form_input no-focus'
                 {...field}
               />
@@ -152,7 +152,7 @@ const AccountProfile = ({user, btnTitle}:accountProfileProps) => {
           </FormItem>
           )}/>
         <div className='flex justify-end'>
-          <Button type='submit' className='bg-primary-500 py-2 lg:py-3 px-5 lg:px-7 rounded-full' disabled={isLoading}>{isLoading ? '...Creating Profile' : 'Submit'}</Button>
+          <Button type='submit' className='bg-primary-500 py-2 lg:py-3 px-5 lg:px-7 rounded-full' disabled={isLoading}>{ isLoading ? `${ pathname === '/profile/edit' ? '...Updating Profile': '...Creating Profile'}` : `${ pathname === '/profile/edit' ? 'Update' : 'Submit'}`}</Button>
         </div>
       </form>
     </Form>

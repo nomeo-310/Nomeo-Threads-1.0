@@ -1,11 +1,12 @@
 "use server";
 
-import { FilterQuery, SortOrder } from "mongoose";
+import { FilterQuery } from "mongoose";
 import Community from "../models/community.model";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDataBase } from "../mongoose";
 import { fetchCommunitiesProps } from "@/types/types";
+import { revalidatePath } from "next/cache";
 
 
 export const createCommunity = async (id: string,name: string,username: string,image: string, bio: string, createdById: string) => {
@@ -45,7 +46,7 @@ export const fetchCommunityDetails = async(id: string) => {
   }
 }
 
-export const fetchCommunityPosts = async(id: string) => {
+export const fetchCommunityThreads = async(id: string) => {
   try {
     connectToDataBase();
 
@@ -57,6 +58,11 @@ export const fetchCommunityPosts = async(id: string) => {
           path: "author",
           model: User,
           select: "name image id",
+        },
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id",
         },
         {
           path: "children",
@@ -188,6 +194,23 @@ export const updateCommunityInfo = async(communityId: string,name: string,userna
     }
 
     return updatedCommunity;
+  } catch (error:any) {
+    throw new Error("Error updating community information:", error);
+  }
+}
+
+export const updateCommunityBio = async(communityId: string, bio: string, path:string) => {
+  try {
+    connectToDataBase();
+
+    const updatedCommunity = await Community.findOneAndUpdate({ id: communityId },{ bio });
+
+    if (!updatedCommunity) {
+      throw new Error("Community not found");
+    }
+
+    return updatedCommunity;
+    revalidatePath(path)
   } catch (error:any) {
     throw new Error("Error updating community information:", error);
   }
